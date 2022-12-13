@@ -70,6 +70,7 @@ def calculate_amount(amount_paid, flavour):
     elif amount_paid < cost:
         return amount_paid - cost
 
+
 def deduct_resources(flavour):
     required_qtys = MENU[flavour]["ingredients"]
     if flavour == 'espresso':
@@ -81,36 +82,48 @@ def deduct_resources(flavour):
         resources["milk"] -= required_qtys["milk"]
 
 
-turn_on_coffee_machine = True
 
-while turn_on_coffee_machine:
-    user_choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
-    if user_choice == 'espresso' or user_choice == 'latte' or user_choice == 'cappuccino':
-        available = check_resources(user_choice)
-        if available == "True":
-            print("Please Insert Coins")
-            q = int(input("How many Quarters?: "))
-            d = int(input("How many Dimes?: "))
-            n = int(input("How many Nickles?: "))
-            p = int(input("How many Pennies?: "))
-            total_amount = process_coins(q,d,n,p)
-            change = calculate_amount(total_amount,user_choice)
-            if change >=0:
-                print(f"Here is your change: ${change}")
-                profit = round(total_amount - change, 2)
-                if not "money" in resources:
-                    resources["money"] = 0.0
-                resources["money"] += profit
-                deduct_resources(user_choice)
-                print("Making Coffee.......")
-                print(f"Here is you're fresh cup of {user_choice.title()}")
+
+
+def coffee_machine():
+    turn_on_coffee_machine = True
+    while turn_on_coffee_machine:
+        user_choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
+        if user_choice == 'espresso' or user_choice == 'latte' or user_choice == 'cappuccino':
+            available = check_resources(user_choice)
+            if available == "True":
+                print("Please Insert Coins")
+                q = int(input("How many Quarters?: "))
+                d = int(input("How many Dimes?: "))
+                n = int(input("How many Nickles?: "))
+                p = int(input("How many Pennies?: "))
+                total_amount = process_coins(q,d,n,p)
+                change = calculate_amount(total_amount,user_choice)
+                if change >=0:
+                    print(f"Here is your change: ${change}")
+                    profit = round(total_amount - change, 2)
+                    if not "money" in resources:
+                        resources["money"] = 0.0
+                    resources["money"] += profit
+                    deduct_resources(user_choice)
+                    print("Making Coffee.......")
+                    time.sleep(3.0)
+                    print(f"Here is you're fresh cup of {user_choice.title()}")
+                    time.sleep(2.0)
+                    #clear()
+                else:
+                    print(f"You have paid less amount for {user_choice.title()}")
+                    print(f"Here is your money back: ${round(total_amount,2)}")
             else:
-                print(f"You have paid less amount for {user_choice.title()}")
-                print(f"Here is your money back: ${round(total_amount,2)}")
+                print(available)
+        elif user_choice == 'report':
+            print_resources()
+        elif user_choice == 'off':
+            turn_on_coffee_machine = False
         else:
-            print(available)
-    elif user_choice == 'report':
-        print_resources()
-    elif user_choice == 'off':
-        turn_on_coffee_machine = False
+            print(f"Sorry we don't have {user_choice.title()} yet. Please try again with available options.")
+            coffee_machine()
+
+
+coffee_machine()
 
