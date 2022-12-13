@@ -89,7 +89,11 @@ def coffee_machine():
     turn_on_coffee_machine = True
     while turn_on_coffee_machine:
         user_choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
-        if user_choice == 'espresso' or user_choice == 'latte' or user_choice == 'cappuccino':
+        if user_choice == 'off':
+            turn_on_coffee_machine = False
+        elif user_choice == 'report':
+            print_resources()
+        elif user_choice == 'espresso' or user_choice == 'latte' or user_choice == 'cappuccino':
             available = check_resources(user_choice)
             if available == "True":
                 print("Please Insert Coins")
@@ -116,10 +120,6 @@ def coffee_machine():
                     print(f"Here is your money back: ${round(total_amount,2)}")
             else:
                 print(available)
-        elif user_choice == 'report':
-            print_resources()
-        elif user_choice == 'off':
-            turn_on_coffee_machine = False
         else:
             print(f"Sorry we don't have {user_choice.title()} yet. Please try again with available options.")
             coffee_machine()
